@@ -1,4 +1,4 @@
-import 'package:open_chessboard_api/boardstate_middleware.dart';
+import 'package:open_chessboard_api/models/boardstate_middleware.dart';
 import 'package:open_chessboard_api/models/Piece.dart';
 
 class BoardStatePipeline {

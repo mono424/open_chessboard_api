@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:open_chessboard_api/boardstate_pipeline.dart';
+import 'package:open_chessboard_api/models/boardstate_pipeline.dart';
 import 'package:open_chessboard_api/chess_utils.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_orientation.dart';
 import 'package:open_chessboard_api/models/Piece.dart';

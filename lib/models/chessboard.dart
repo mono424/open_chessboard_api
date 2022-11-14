@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
-import 'package:open_chessboard_api/chessboard_device.dart';
+import 'package:open_chessboard_api/models/chessboard_device.dart';
 import 'package:open_chessboard_api/models/field_update.dart';
 
 abstract class Chessboard<T> {

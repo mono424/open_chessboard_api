@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:chessnutdriver/chessnutdriver.dart';
-import 'package:open_chessboard_api/chessboard.dart';
-import 'package:open_chessboard_api/chessboard_device.dart';
+import 'package:open_chessboard_api/models/chessboard.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_boardstate.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_leds.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_orientation.dart';
 import 'package:open_chessboard_api/mixins/chessboard_mixin_boardstate.dart';
 import 'package:open_chessboard_api/mixins/chessboard_mixin_orientation.dart';
 import 'package:open_chessboard_api/models/Piece.dart';
+import 'package:open_chessboard_api/models/chessboard_device.dart';
 import 'package:open_chessboard_api/models/piece_delta.dart';
 import 'package:synchronized/synchronized.dart';
 
