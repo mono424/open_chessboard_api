@@ -1,0 +1,3 @@
+enum PieceDeltaType {
+  pieceMissing, pieceNeedsRemoval
+}

@@ -4,9 +4,14 @@ import 'package:chessnutdriver/chessnutdriver.dart';
 import 'package:open_chessboard_api/chessboard.dart';
 import 'package:open_chessboard_api/chessboard_device.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_boardstate.dart';
+import 'package:open_chessboard_api/features/chessboard_feature_leds.dart';
+import 'package:open_chessboard_api/features/chessboard_feature_orientation.dart';
 import 'package:open_chessboard_api/models/Piece.dart';
+import 'package:open_chessboard_api/models/piece_delta.dart';
+import 'package:synchronized/synchronized.dart';
 
-class Chessnut extends Chessboard<ChessnutCommunicationClient> implements ChessboardFeatureBoardstate {
+class Chessnut extends Chessboard<ChessnutCommunicationClient> 
+    implements ChessboardFeatureBoardstate, ChessboardFeatureOrientation, ChessboardFeatureLeds {
   static LEDPattern allLEDsOn = LEDPattern(List.filled(64, true));
   static LEDPattern allLEDsOff = LEDPattern();
 
@@ -31,24 +36,23 @@ class Chessnut extends Chessboard<ChessnutCommunicationClient> implements Chessb
 
     _boardListener = nBoard
       .getBoardUpdateStream()
-      .handleError(onError)
       .listen(onUpdateEvent);
 
     board = nBoard;
     connectedStreamController.add(true);
   }
 
-  Map<String, String> lastBoardStateUpdate;
+  Map<String, String>? lastBoardStateUpdate;
   void onUpdateEvent(Map<String, String> board) {
     lastBoardStateUpdate = board;
     Map<String, Piece?> newBoard = mapBoardState(board);
     setBoardState(newBoard);
   }
 
-  Map<String, Piece> mapBoardState(Map<String, String> boardMap) {
+  Map<String, Piece?> mapBoardState(Map<String, String> boardMap) {
     Map<String, Piece?> result = {};
     for (var square in boardMap.keys) {
-      result[square] = boardMap[square] == "" ? null : Piece(boardMap[square]);
+      result[square] = boardMap[square] == "" ? null : Piece(boardMap[square]!);
     }
     return result;
   }
@@ -70,26 +74,35 @@ class Chessnut extends Chessboard<ChessnutCommunicationClient> implements Chessb
   LEDPattern ledPattern = LEDPattern();
 
   @override
-  Future<void> resetBoardDeltaLeds() {
+  Future<void> unsetAllLeds() async {
+    if (board == null) {
+      return;
+    }
     return lock.synchronized(() async {
       ledPattern = LEDPattern();
-      await board.value.setLEDs(ledPattern).timeout(Duration(seconds: 1));
+      await board!.setLEDs(ledPattern).timeout(const Duration(seconds: 1));
     });
   }
 
   @override
-  Future<void> setBoardDeltaLeds(List<PieceSyncDeltaEntry> delta) {
+  Future<void> setDeltaLeds(List<PieceDelta> delta) async {
+    if (board == null) {
+      return;
+    }
     return lock.synchronized(() async {
       ledPattern = LEDPattern();
       for (var item in delta) {
         ledPattern.setSquare(item.square, true);
       }
-      await board.value.setLEDs(ledPattern).timeout(Duration(seconds: 1));
+      await board!.setLEDs(ledPattern).timeout(const Duration(seconds: 1));
     });
   }
 
   @override
-  Future<void> setCommitedMoveLeds(List<String> squares, [String checkSquare]) async {
+  Future<void> setCommitedMoveLeds(List<String> squares, [String? checkSquare]) async {
+    if (board == null) {
+      return;
+    }
     return lock.synchronized(() async {
       LEDPattern notifyPattern = LEDPattern();
       for (var square in squares) {
@@ -98,8 +111,8 @@ class Chessnut extends Chessboard<ChessnutCommunicationClient> implements Chessb
       if (checkSquare != null) {
         notifyPattern.setSquare(checkSquare, true);
       }
-      await board.value.setLEDs(notifyPattern).timeout(Duration(seconds: 1));
-      await board.value.setLEDs(ledPattern).timeout(Duration(seconds: 1));
+      await board!.setLEDs(notifyPattern).timeout(const Duration(seconds: 1));
+      await board!.setLEDs(ledPattern).timeout(const Duration(seconds: 1));
     });
   }
 }
