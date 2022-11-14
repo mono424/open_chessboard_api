@@ -6,12 +6,16 @@ import 'package:open_chessboard_api/chessboard_device.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_boardstate.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_leds.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_orientation.dart';
+import 'package:open_chessboard_api/mixins/chessboard_mixin_boardstate.dart';
+import 'package:open_chessboard_api/mixins/chessboard_mixin_orientation.dart';
 import 'package:open_chessboard_api/models/Piece.dart';
 import 'package:open_chessboard_api/models/piece_delta.dart';
 import 'package:synchronized/synchronized.dart';
 
 class Chessnut extends Chessboard<ChessnutCommunicationClient> 
-    implements ChessboardFeatureBoardstate, ChessboardFeatureOrientation, ChessboardFeatureLeds {
+    with ChessboardMixinBoardstate, ChessboardMixinOrientation
+    implements ChessboardFeatureBoardstate, ChessboardFeatureOrientation, ChessboardFeatureLeds
+{
   static LEDPattern allLEDsOn = LEDPattern(List.filled(64, true));
   static LEDPattern allLEDsOff = LEDPattern();
 
@@ -35,7 +39,7 @@ class Chessnut extends Chessboard<ChessnutCommunicationClient>
     await nBoard.setLEDs(allLEDsOff);
 
     _boardListener = nBoard
-      .getBoardUpdateStream()
+      .getBoardUpdateStream()!
       .listen(onUpdateEvent);
 
     board = nBoard;

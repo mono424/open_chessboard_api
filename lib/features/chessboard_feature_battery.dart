@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:open_chessboard_api/models/battery_update.dart';
+import 'package:rxdart/rxdart.dart';
 
 abstract class ChessboardFeatureBattery {
-  
-  final StreamController<BatteryUpdate> _batteryStreanController;
 
-  ChessboardFeatureBattery() : _batteryStreanController = StreamController<BatteryUpdate>.broadcast();
+  ChessboardFeatureBattery();
 
-  get battery =>  _batteryStreanController.stream;
+  BatteryUpdate get orientation;
+  ValueStream<BatteryUpdate> get orientationStream;
 
 }
