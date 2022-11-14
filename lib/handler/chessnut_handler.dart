@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'package:chessnutdriver/chessnutdriver.dart';
 import 'package:open_chessboard_api/models/chessboard.dart';
-import 'package:open_chessboard_api/features/chessboard_feature_boardstate.dart';
-import 'package:open_chessboard_api/features/chessboard_feature_leds.dart';
-import 'package:open_chessboard_api/features/chessboard_feature_orientation.dart';
-import 'package:open_chessboard_api/mixins/chessboard_mixin_boardstate.dart';
-import 'package:open_chessboard_api/mixins/chessboard_mixin_orientation.dart';
+import 'package:open_chessboard_api/features/boardstate_feature.dart';
+import 'package:open_chessboard_api/features/leds_feature.dart';
+import 'package:open_chessboard_api/features/orientation_feature.dart';
+import 'package:open_chessboard_api/mixins/boardstate_mixin.dart';
+import 'package:open_chessboard_api/mixins/orientation_mixin.dart';
 import 'package:open_chessboard_api/models/Piece.dart';
 import 'package:open_chessboard_api/models/chessboard_device.dart';
 import 'package:open_chessboard_api/models/piece_delta.dart';
 import 'package:synchronized/synchronized.dart';
 
 class ChessnutHandler extends Chessboard<ChessnutCommunicationClient> 
-    with ChessboardMixinBoardstate, ChessboardMixinOrientation
-    implements ChessboardFeatureBoardstate, ChessboardFeatureOrientation, ChessboardFeatureLeds
+    with BoardstateMixin, OrientationMixin
+    implements BoardstateFeature, OrientationFeature, LedsFeature
 {
   static LEDPattern allLEDsOn = LEDPattern(List.filled(64, true));
   static LEDPattern allLEDsOff = LEDPattern();

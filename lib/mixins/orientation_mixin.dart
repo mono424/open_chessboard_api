@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:open_chessboard_api/models/chessboard_orientation.dart';
 import 'package:rxdart/rxdart.dart';
 
-abstract class ChessboardMixinOrientation {
+abstract class OrientationMixin {
   
   @protected
   final BehaviorSubject<ChessboardOrientation> orientationSubject 

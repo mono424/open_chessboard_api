@@ -1,8 +1,8 @@
 import 'package:open_chessboard_api/models/piece_delta.dart';
 
-abstract class ChessboardFeatureLeds {
+abstract class LedsFeature {
 
-  ChessboardFeatureLeds();
+  LedsFeature();
 
   Future<void> unsetAllLeds();
   Future<void> setDeltaLeds(List<PieceDelta> delta);

@@ -4,9 +4,9 @@ import 'package:open_chessboard_api/models/Piece.dart';
 import 'package:open_chessboard_api/models/board_state.dart';
 import 'package:rxdart/rxdart.dart';
 
-abstract class ChessboardFeatureBoardstate {
+abstract class BoardstateFeature {
 
-  ChessboardFeatureBoardstate();
+  BoardstateFeature();
 
   BoardStatePipeline get boardStatePipeline;
   BoardState get boardstate;

@@ -1,13 +1,13 @@
 import 'package:meta/meta.dart';
+import 'package:open_chessboard_api/features/orientation_feature.dart';
 import 'package:open_chessboard_api/models/boardstate_pipeline.dart';
 import 'package:open_chessboard_api/chess_utils.dart';
-import 'package:open_chessboard_api/features/chessboard_feature_orientation.dart';
 import 'package:open_chessboard_api/models/Piece.dart';
 import 'package:open_chessboard_api/models/board_state.dart';
 import 'package:open_chessboard_api/models/chessboard_orientation.dart';
 import 'package:rxdart/rxdart.dart';
 
-abstract class ChessboardMixinBoardstate {
+abstract class BoardstateMixin {
   final BoardStatePipeline boardStatePipeline = BoardStatePipeline();
 
   @protected
@@ -30,8 +30,8 @@ abstract class ChessboardMixinBoardstate {
 
     rawBoardState = newRawState;
 
-    if (this is ChessboardFeatureOrientation) {
-      boardstateSubject.add(BoardState(_applyOrientationToBoardState(newRawState, (this as ChessboardFeatureOrientation).orientation)));
+    if (this is OrientationFeature) {
+      boardstateSubject.add(BoardState(_applyOrientationToBoardState(newRawState, (this as OrientationFeature).orientation)));
     } else {
       boardstateSubject.add(BoardState(newRawState));
     }
