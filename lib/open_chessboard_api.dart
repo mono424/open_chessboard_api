@@ -1,0 +1,1 @@
+library open_chessboard_api;

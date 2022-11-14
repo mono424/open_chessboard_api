@@ -1,0 +1,3 @@
+enum FieldUpdateAction {
+  pickUp, setDown
+}
