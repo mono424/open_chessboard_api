@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:chessnutdriver/chessnutdriver.dart';
 import 'package:open_chessboard_api/chessboard.dart';
+import 'package:open_chessboard_api/chessboard_device.dart';
 import 'package:open_chessboard_api/features/chessboard_feature_boardstate.dart';
 import 'package:open_chessboard_api/models/Piece.dart';
 
-class Chessnut extends Chessboard implements ChessboardFeatureBoardstate {
+class Chessnut extends Chessboard<ChessnutCommunicationClient> implements ChessboardFeatureBoardstate {
   static LEDPattern allLEDsOn = LEDPattern(List.filled(64, true));
   static LEDPattern allLEDsOff = LEDPattern();
 
@@ -13,10 +14,10 @@ class Chessnut extends Chessboard implements ChessboardFeatureBoardstate {
   StreamSubscription? _boardListener;
 
   @override
-  Future<void> connect(BoardDevice device, Function onDisconnect) async {
+  Future<void> connect(ChessboardDevice<ChessnutCommunicationClient> device) async {
     if (board != null) return;
 
-    ChessnutCommunicationClient client = await device.getChessnutCommunicationClient();
+    ChessnutCommunicationClient client = device.communicationClient;
     
     ChessnutBoard nBoard = ChessnutBoard();
     await nBoard.init(client).timeout(const Duration(seconds: 10));
@@ -40,7 +41,7 @@ class Chessnut extends Chessboard implements ChessboardFeatureBoardstate {
   Map<String, String> lastBoardStateUpdate;
   void onUpdateEvent(Map<String, String> board) {
     lastBoardStateUpdate = board;
-    Map<String, WPPiece> newBoard = mapBoardState(board);
+    Map<String, Piece?> newBoard = mapBoardState(board);
     setBoardState(newBoard);
   }
 
