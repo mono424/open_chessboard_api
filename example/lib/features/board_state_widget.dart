@@ -35,7 +35,7 @@ class BoardStateWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(entry.key, style: TextStyle(color: Colors.white)),
-                        Text(entry.value ?? ".", style: TextStyle(color: Colors.white, fontSize: 8)),
+                        Text(entry.value.toString() ?? ".", style: TextStyle(color: Colors.white, fontSize: 8)),
                       ],
                     )
                   ),

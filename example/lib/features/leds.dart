@@ -8,8 +8,8 @@ class Leds extends StatelessWidget {
 
   void testLeds() async {
     board.setDeltaLeds([
-      PieceDelta("a2", Piece("P"), PieceDeltaType.pieceNeedsRemoval),
-      PieceDelta("a4", Piece("P"), PieceDeltaType.pieceMissing),
+      PieceDelta("e2", Piece("P"), PieceDeltaType.pieceNeedsRemoval),
+      PieceDelta("e4", Piece("P"), PieceDeltaType.pieceMissing),
     ]);
   }
 
