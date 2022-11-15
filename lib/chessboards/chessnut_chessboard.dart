@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'package:chessnutdriver/chessnutdriver.dart';
 import 'package:open_chessboard_api/models/chessboard.dart';
-import 'package:open_chessboard_api/features/boardstate_feature.dart';
+import 'package:open_chessboard_api/features/board_state_feature.dart';
 import 'package:open_chessboard_api/features/leds_feature.dart';
 import 'package:open_chessboard_api/features/orientation_feature.dart';
-import 'package:open_chessboard_api/mixins/boardstate_mixin.dart';
+import 'package:open_chessboard_api/mixins/board_state_mixin.dart';
 import 'package:open_chessboard_api/mixins/orientation_mixin.dart';
-import 'package:open_chessboard_api/models/Piece.dart';
-import 'package:open_chessboard_api/models/chessboard_device.dart';
+import 'package:open_chessboard_api/models/piece.dart';
 import 'package:open_chessboard_api/models/piece_delta.dart';
 import 'package:synchronized/synchronized.dart';
 
-class ChessnutHandler extends Chessboard<ChessnutCommunicationClient> 
-    with BoardstateMixin, OrientationMixin
-    implements BoardstateFeature, OrientationFeature, LedsFeature
+class ChessnutChessboard extends Chessboard<ChessnutCommunicationClient> 
+    with BoardStateMixin, OrientationMixin
+    implements BoardStateFeature, OrientationFeature, LedsFeature
 {
   static LEDPattern allLEDsOn = LEDPattern(List.filled(64, true));
   static LEDPattern allLEDsOff = LEDPattern();
@@ -22,15 +21,11 @@ class ChessnutHandler extends Chessboard<ChessnutCommunicationClient>
   StreamSubscription? _boardListener;
 
   @override
-  Future<void> connect(ChessboardDevice<ChessnutCommunicationClient> device) async {
+  Future<void> connect(ChessnutCommunicationClient client) async {
     if (board != null) return;
-
-    ChessnutCommunicationClient client = device.communicationClient;
     
     ChessnutBoard nBoard = ChessnutBoard();
     await nBoard.init(client).timeout(const Duration(seconds: 10));
-
-    device.onDisconnect = () => handleDisconnect();
 
     // TURN ON LEDS
     await nBoard.setLEDs(allLEDsOn);
@@ -60,11 +55,8 @@ class ChessnutHandler extends Chessboard<ChessnutCommunicationClient>
     return result;
   }
 
-  Future<void> disconnect() async {
-    handleDisconnect();
-  }
-
-  void handleDisconnect() {
+  @override
+  void dispose() {
     if (_boardListener != null) {
       _boardListener!.cancel();
     }

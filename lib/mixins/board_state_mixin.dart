@@ -2,12 +2,12 @@ import 'package:meta/meta.dart';
 import 'package:open_chessboard_api/features/orientation_feature.dart';
 import 'package:open_chessboard_api/models/boardstate_pipeline.dart';
 import 'package:open_chessboard_api/chess_utils.dart';
-import 'package:open_chessboard_api/models/Piece.dart';
+import 'package:open_chessboard_api/models/piece.dart';
 import 'package:open_chessboard_api/models/board_state.dart';
 import 'package:open_chessboard_api/models/chessboard_orientation.dart';
 import 'package:rxdart/rxdart.dart';
 
-abstract class BoardstateMixin {
+abstract class BoardStateMixin {
   final BoardStatePipeline boardStatePipeline = BoardStatePipeline();
 
   @protected

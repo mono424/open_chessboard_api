@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
-import 'package:open_chessboard_api/models/chessboard_device.dart';
 import 'package:open_chessboard_api/models/field_update.dart';
 
 abstract class Chessboard<T> {
@@ -16,6 +15,8 @@ abstract class Chessboard<T> {
   Stream<bool> get connected => connectedStreamController.stream;
   Stream<FieldUpdate> get updates => streamController.stream;
 
-  Future<void> connect(ChessboardDevice<T> device);
+  Future<void> connect(T client);
+
+  void dispose();
   
 }

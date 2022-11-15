@@ -1,4 +1,4 @@
-import 'package:open_chessboard_api/models/Piece.dart';
+import 'package:open_chessboard_api/models/piece.dart';
 import 'package:open_chessboard_api/models/field_update_action.dart';
 
 class FieldUpdate {
