@@ -47,7 +47,13 @@ class Piece {
     return Piece(_notation);
   }
 
-  static bool equal(Piece a, Piece b) {
+  static bool equal(Piece? a, Piece? b) {
+    if (a == null && b == null) {
+      return true;
+    }
+    if (a == null || b == null) {
+      return false;
+    }
     return a.type == b.type && a.color == b.color;
   }
 }

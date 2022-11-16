@@ -1,17 +1,19 @@
 import 'dart:async';
 import 'package:chessnutdriver/chessnutdriver.dart';
+import 'package:open_chessboard_api/mixins/board_move_delta_mixin.dart';
 import 'package:open_chessboard_api/models/chessboard.dart';
 import 'package:open_chessboard_api/features/board_state_feature.dart';
 import 'package:open_chessboard_api/features/leds_feature.dart';
 import 'package:open_chessboard_api/features/orientation_feature.dart';
 import 'package:open_chessboard_api/mixins/board_state_mixin.dart';
 import 'package:open_chessboard_api/mixins/orientation_mixin.dart';
+import 'package:open_chessboard_api/models/field_update.dart';
 import 'package:open_chessboard_api/models/piece.dart';
 import 'package:open_chessboard_api/models/piece_delta.dart';
 import 'package:synchronized/synchronized.dart';
 
 class ChessnutChessboard extends Chessboard<ChessnutCommunicationClient> 
-    with BoardStateMixin, OrientationMixin
+    with BoardStateMixin, OrientationMixin, BoardMoveDeltaMixin
     implements BoardStateFeature, OrientationFeature, LedsFeature
 {
   static LEDPattern allLEDsOn = LEDPattern(List.filled(64, true));
@@ -40,11 +42,19 @@ class ChessnutChessboard extends Chessboard<ChessnutCommunicationClient>
     connectedStreamController.add(true);
   }
 
-  Map<String, String>? lastBoardStateUpdate;
+  Map<String, Piece?>? lastBoardStateUpdate;
   void onUpdateEvent(Map<String, String> board) {
-    lastBoardStateUpdate = board;
+    Map<String, Piece?>? oldBoard = lastBoardStateUpdate;
+
     Map<String, Piece?> newBoard = mapBoardState(board);
     setBoardState(newBoard);
+    lastBoardStateUpdate = newBoard;
+
+    List<FieldUpdate> updates = mapFieldUpdate(oldBoard, newBoard);
+    if(updates.isEmpty) return;
+    for (FieldUpdate update in updates) {
+      streamController.add(update);
+    }
   }
 
   Map<String, Piece?> mapBoardState(Map<String, String> boardMap) {
