@@ -1,0 +1,54 @@
+@startuml design
+App o- Chessboard
+
+Chessboard <|-- UniversalChesboard
+Chessboard <|-- IOChessBoard
+
+Chessboard *- Client
+
+IOChessBoard <|--- JustPiceRecognitionBoard
+
+LedMixin <|--SquareOffChessboard
+LedMixin <|--MileniumChessboard
+LedMixin <|--ChessnutChessboard
+
+IOChessBoard <|-- SquareOffChessboard
+IOChessBoard <|-- MileniumChessboard
+IOChessBoard <|-- ChessnutChessboard
+
+
+class Chessboard {
+-- from pheripherial --
++ Stream<Move> moves
++ Stream<BoardState> boardStates
+-- from central --
++ Future<bool> init(T client)
++ Future<void> triggerNewGame(String fen)
++ Future<void> triggerCentralMove(Move m)
++ Future<void> judgePeripherialMove(bool isAccepted)
+}
+
+class IOChessBoard {
+  All simple boards, 
+  which can't handle movement recognition on peripherial level level 
+--
++ Stream<FieldUpdate> _updates
++ _convertUpdatesToMoveStream()
+}
+
+MovementDiscoveryAlgorithm -o IOChessBoard
+
+class UniversalChesboard {
+  For boards, which will handle our futuristic protocol, 
+  on which we are working 
+}
+
+
+Class Move {
+Some simple move structutre
+__
+String from
+String dest
+Pice promotion
+}
+@enduml
